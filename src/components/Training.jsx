@@ -4,7 +4,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
-import {  getTrainings } from '../customerapi';
+import {  getTrainings, getCustomer } from '../customerapi';
+import dayjs from 'dayjs';
+import UTC from 'dayjs';
 
 export default function Training() {
     const [trainings, setTrainings] = useState([]);
@@ -13,17 +15,42 @@ export default function Training() {
         {field: "date", filter: true},
         {field: "duration", filter: true},
         {field: "activity", filter: true},
-        {field: "customer", filter: true}
+        {field: "customerName", headerName: "Customer", filter: true}, 
     ]);
+
     useEffect(() => {
         handleFetch();
     }, []);
     
     const handleFetch = () => {
+        
         getTrainings()
-        .then(data => setTrainings(data._embedded.trainings))
-        .catch(error => console.error(error))
-    }
+            .then(data => {
+                const trainings = data._embedded.trainings;
+
+                const fetchPromises = trainings.map(training =>
+                    getCustomer(training._links.customer.href)
+                        .then(customer => ({
+                            ...training,
+                            date: dayjs(training.date).format('DD.MM.YYYY H:mm'),
+                            customerName: customer.firstname + " " + customer.lastname
+                        }))
+                        .catch(error => {
+                            console.error(error);
+                            return {
+                                ...training,
+                                customerName: ""
+                            };
+                        })
+                );
+                Promise.all(fetchPromises).then(updatedTrainings => {
+                    setTrainings(updatedTrainings);
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
 
     return(
         <>
