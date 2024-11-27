@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import {  getTrainings, getCustomer } from '../customerapi';
 import dayjs from 'dayjs';
-import UTC from 'dayjs';
+
 
 export default function Training() {
     const [trainings, setTrainings] = useState([]);
