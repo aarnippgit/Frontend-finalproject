@@ -3,9 +3,22 @@ import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { cyan } from '@mui/material/colors';
 import { Link, Outlet } from 'react-router-dom';
+import { Button } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 function App() {
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main:cyan['A100'],
+      },
+    },
+  });
+
   return (
     <Container maxWidth="xl">
       <AppBar position="static">
@@ -13,8 +26,14 @@ function App() {
           <Typography variant="b6">Personal Trainer</Typography>
         </Toolbar>
         <nav>
-          <Link to={"/customer"}>Customers</Link>
-          <Link to={"/training"}>Training</Link>
+        <ThemeProvider theme={theme}>
+          <Button variant="contained" size="large">
+            <Link to="/customer" style={{textDecoration: 'none' }}>Customers</Link>
+          </Button>
+          <Button variant="contained" size="large">
+            <Link to="/training" style={{textDecoration: 'none' }}>Training</Link>
+          </Button>
+          </ThemeProvider>
         </nav>
         </AppBar>
       <CssBaseline />

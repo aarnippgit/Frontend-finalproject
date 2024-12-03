@@ -4,7 +4,8 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 import {  getTrainings, getCustomer, deleteFunction } from '../customerapi';
 import Snackbar from '@mui/material/Snackbar';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -13,13 +14,15 @@ export default function Training() {
     
     dayjs.extend(utc);
     dayjs.extend(timezone);
+
     const [open, setOpen] = useState(false);
     const [trainings, setTrainings] = useState([]);
     const [colDefs, setColDefs] = useState([
         {
             field:"Actions",
-            cellRenderer: params => <Button size="small" color = "error" onClick={() => handleDelete(params.data)}>Delete</Button>,
-            width: 150
+            cellRenderer: params => <IconButton size="small" color = "error" onClick={() => handleDelete(params.data)}><DeleteIcon /></IconButton>,
+            width: 150,
+            sortable:false
         },
         {
             field: "date", 
@@ -68,7 +71,7 @@ export default function Training() {
     };
 
     const handleDelete = (params) => {
-        if(window.confirm("Are you sure?")){
+        if(window.confirm("Delete training?")){
             setOpen(true);
             deleteFunction(params._links.self.href)
             .then(() => handleFetch())

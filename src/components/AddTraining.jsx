@@ -41,7 +41,7 @@ export default function Addtraining(props) {
 
     return (
         <>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button variant="outlined" size="small" onClick={handleClickOpen}>
                 Add training
             </Button>
             <Dialog
