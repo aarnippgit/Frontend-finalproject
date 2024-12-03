@@ -5,9 +5,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { saveCustomer } from '../customerapi';
+import { updateCustomer } from '../customerapi';
 
-export default function AddCustomer(props) {
+export default function EditCustomer(props) {
     const [customer, setCustomer] = useState({
         firstname:"",
         lastname:"",
@@ -20,8 +20,18 @@ export default function AddCustomer(props) {
 
     const [open, setOpen] = useState(false);
 
+
     const handleClickOpen = () => {
         setOpen(true);
+        setCustomer({
+            firstname: props.data.firstname,
+            lastname: props.data.lastname,
+            streetaddress: props.data.streetaddress,
+            postcode: props.data.postcode,
+            city: props.data.city,
+            email: props.data.email,
+            phone: props.data.phone
+        })
     };
 
     const handleClose = () => {
@@ -29,24 +39,22 @@ export default function AddCustomer(props) {
     };
 
     const handleSave= () => {
-        saveCustomer(customer)
-        .then(() => {
-            props.handleFetch(); 
-            handleClose();
-        })
-        .catch(err => console.error(err))
+        updateCustomer(props.data._links.customer.href, customer)
+        .then(() => props.handleFetch())
+        .catch(err => console.log(err))
     }
+
 
     return (
     <>
     <Button variant="outlined" onClick={handleClickOpen}>
-        Add Customer
+        Edit
     </Button>
     <Dialog
         open={open}
         onClose={handleClose}
     >
-        <DialogTitle>New Customer</DialogTitle>
+        <DialogTitle>Edit Customer</DialogTitle>
         <DialogContent>
         <TextField
             margin="dense"

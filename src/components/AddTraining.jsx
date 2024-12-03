@@ -5,13 +5,19 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import dayjs from 'dayjs';
+import 'dayjs/locale/fi';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { saveTraining } from '../customerapi';
 
 export default function Addtraining(props) {
     const [training, setTraining] = useState({
-        date:"",
+        date:dayjs(),
         duration:"",
         activity:"",
+        customer:props.data._links.customer.href
     });
 
     const [open, setOpen] = useState(false);
@@ -44,33 +50,31 @@ export default function Addtraining(props) {
             >
             <DialogTitle>New Training</DialogTitle>
             <DialogContent>
-            <TextField
-                margin="dense"
-                name="date"
-                value={training.date}
-                onChange={event => setTraining({...training, date: event.target.value})}
-                label="Date"
-                fullWidth
-                variant="standard"
-            />
-            <TextField
-                margin="dense"
-                name="duration"
-                value={training.duration}
-                onChange={event => setTraining({...training, duration: event.target.value})}
-                label="Duration"
-                fullWidth
-                variant="standard"
-            />
-            <TextField
-                margin="dense"
-                name="activity"
-                value={training.activity}
-                onChange={event => setTraining({...training, activity: event.target.value})}
-                label="Activity"
-                fullWidth
-                variant="standard"
-            />
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fi">
+                    <DateTimePicker
+                        ampm={false}
+                        value= {training.date}
+                        onChange={(newValue) => setTraining({...training, date: newValue})}
+                    />
+                </LocalizationProvider>
+                <TextField
+                    margin="dense"
+                    name="duration"
+                    value={training.duration}
+                    onChange={event => setTraining({...training, duration: event.target.value})}
+                    label="Duration"
+                    fullWidth
+                    variant="standard"
+                />
+                <TextField
+                    margin="dense"
+                    name="activity"
+                    value={training.activity}
+                    onChange={event => setTraining({...training, activity: event.target.value})}
+                    label="Activity"
+                    fullWidth
+                    variant="standard"
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
