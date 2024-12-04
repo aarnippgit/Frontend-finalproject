@@ -20,7 +20,8 @@ export default function Training() {
     const [colDefs, setColDefs] = useState([
         {
             field:"Actions",
-            cellRenderer: params => <IconButton size="small" color = "error" onClick={() => handleDelete(params.data)}><DeleteIcon /></IconButton>,
+            cellRenderer: params => 
+            <IconButton size="small" color = "error" onClick={() => handleDelete(params.data)}><DeleteIcon /></IconButton>,
             width: 150,
             sortable:false
         },
@@ -40,7 +41,7 @@ export default function Training() {
     useEffect(() => {
         handleFetch();
     }, []);
-    
+
     const handleFetch = () => {
         getTrainings()
             .then(data => {
@@ -53,13 +54,7 @@ export default function Training() {
                             date: training.date,
                             customerName: customer.firstname + " " + customer.lastname
                         }))
-                        .catch(error => {
-                            console.error(error);
-                            return {
-                                ...training,
-                                customerName: ""
-                            };
-                        })
+                        .catch(error => console.error(error))
                 );
                 Promise.all(fetchPromises).then(updatedTrainings => {
                     setTrainings(updatedTrainings);
@@ -95,7 +90,7 @@ export default function Training() {
                 />
                 <Snackbar
                     open={open}
-                    message="Customer deleted"
+                    message="Training deleted"
                     autoHideDuration={3000}
                     onClose={handleClose}
                 />

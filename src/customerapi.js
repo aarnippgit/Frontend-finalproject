@@ -7,6 +7,7 @@ export function getCustomers() {
         return response.json();
     })
 }
+
 export function getCustomer(url) {
     return fetch(url)
     .then(response =>{
@@ -32,6 +33,7 @@ export function deleteFunction(url) {
             .then(response => {
                 if (!response.ok)
                     throw new Error("Error in delete: " + response.statusText);    
+
                 return response.json();
             })
 }
@@ -49,6 +51,7 @@ export function saveCustomer(newCustomer) {
     return response.json();
     })
 }
+
 export function saveTraining(newTraining) {
     return fetch(import.meta.env.VITE_API_URL + "trainings", {
     method: "POST", 
@@ -74,18 +77,5 @@ export function updateCustomer(url, customer) {
             throw new Error("Error in saving: " + response.statusText);
 
     return response.json();
-    })
-}
-
-export function resetDB(){
-    return fetch("https://customer-rest-service-frontend-personaltrainer.2.rahtiapp.fi/reset"
-        , {
-        method: "POST",
-    })
-    .then(response =>{
-        if(!response.ok)
-            throw new Error("Error in fetch: " + response.statusText);
-
-        return response.text();
     })
 }
