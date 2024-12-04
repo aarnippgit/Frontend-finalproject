@@ -7,7 +7,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { cyan } from '@mui/material/colors';
 import { Link, Outlet } from 'react-router-dom';
 import { Button } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 
 function App() {
 
